@@ -1,0 +1,189 @@
+@import '../shared/_styles/variables';
+@import '../shared/_styles/mixins';
+@import '../shared/_styles/badge';
+@import '../shared/_styles/input-select';
+
+.page-home{
+
+}
+
+.block {
+  display: inline-block;
+}
+
+.mobile-header{
+    display:none;
+    img{
+        width:100%;
+        height:auto;
+    }
+}
+
+.custom-welcome{
+  background:url('../../assets/images/fpo-header-bg.jpg') no-repeat;
+  background-size:cover;
+  max-width:$max-full-width;
+  margin:auto;
+  width:100%;
+  h2{
+    font-size:36px;
+    color:$white;
+    line-height:36px;
+    padding:70px 0;
+    font-weight:bold;
+    text-transform:uppercase;
+  }
+}
+
+.contract-list{
+  @include desktopContainer;
+  padding-top:60px;
+  .error-validation{
+    font-size:12px;
+    &.badge.past-due{
+      margin-left:auto;
+    }
+  }
+  .contract{
+    @include gradientBg($white, #ededee);
+    border:1px solid $contract-border-color;
+    padding:30px 30px 20px 30px;
+    margin-bottom:30px;
+    &:last-child{
+      margin-bottom:100px;
+    }
+  }
+  .contract-heading {
+    margin-bottom:20px;
+    padding-bottom:20px;
+    border-bottom:1px solid $contract-border-color;
+    display:flex;
+    h2{
+      font-size:26px;
+      line-height:28px;
+      font-weight:300;
+      display:block;
+    }
+    .loan-account-details{
+      align-self:center;
+      .account-number-label{
+        margin-left:20px;
+      }
+      .account-number-label,
+      .account-number-value{
+        font-size:12px;
+        line-height:14px;
+        vertical-align: middle;
+      }
+    }
+  }
+  .contract-body{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .contract-vehicle{
+    flex:0 0 25%;
+  }
+  .contract-details{
+    flex-basis:calc(50% - 60px);
+    // padding:0px 40px 0 20px;
+    ul{
+      li{
+        display:flex;
+        justify-content: space-between;
+        align-items:center;
+        padding: 5px 0;
+        border-bottom:1px dotted $input-border-gray;
+        &:first-child{
+          padding-top:0;
+        }
+        &:last-child{
+          border-bottom:none;
+        }
+        &.contract-payment-amount{
+          .label{
+            font-weight:bold;
+          }
+        }
+        .label{
+          font-size:12px;
+          line-height:20px;
+        }
+        .value{
+          font-size:12px;
+          font-weight:bold;
+          color:$header-font-color;
+          .weight-normal{
+            font-weight:normal;
+          }
+          .fa{
+            color:$primary-blue;
+          }
+        }
+      }
+    }
+  }
+  .contract-payment{
+    flex:0 0 25%;
+    text-align:center;
+    button{
+      margin-bottom:10px;
+    }
+  }
+
+  @media (max-width: $medium){
+    padding-top:0;
+    .contract{
+      padding:15px;
+    }
+    .contract-heading{
+      flex-direction:column;
+      justify-content: flex-start;
+      h2{
+        font-size:16px;
+      }
+      .loan-account-details{
+        align-self: flex-start;
+        .account-number-label{
+          margin-left:0;
+        }
+      }
+    }
+    .contract-body{
+      flex-wrap:wrap;
+      .contract-vehicle{
+        flex:0 0 100%;
+        padding:0;
+        text-align:center;
+        margin-bottom:20px;
+      }
+      .contract-details{
+        flex:0 0 100%;
+        padding:0;
+      }
+      .contract-payment{
+        flex:0 0 100%;
+        padding:0;
+      }
+      .contract-payment-amount{
+        margin-bottom:20px;
+      }
+    }
+  }
+}
+
+@media (max-width:$medium){
+  .mobile-header{
+      display:block;
+  }
+  .custom-welcome{
+    background:none;
+    h2{
+      color:$header-font-color;
+      font-size:26px;
+      line-height:26px;
+      padding:25px 0;
+    }
+  }
+}

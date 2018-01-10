@@ -1,0 +1,77 @@
+<div class="home">
+    <div class="mobile-header">
+        <img src="../../assets/images/fpo-header-image-mobile.jpg" alt="{{'ngw.general.img-alt' | translate}}" />
+    </div>
+    <div class="header custom-welcome">
+        <div class="desktop-container">
+            <h2>{{'ngw.contract-list.welcome' | translate}}<br> {{firstName}}</h2>
+        </div>
+    </div>
+    <div class="contract-list" *ngIf="!contractError && dataLoaded">
+        <div *ngFor="let contract of orderedContracts" class="contract">
+            <div class="contract-container">
+                <!--selfServiceAuthorized?-->
+                <div class="contract-heading">
+                    <h2>
+                        {{contract.year}}
+                        {{contract.make}}
+                        {{contract.model}}
+                    </h2>
+                    <div class="loan-account-details">
+                        <span class="account-number-label">{{getAccountCategoryLabel(contract.portfolioCategoryCode)}} {{'ngw.contract-list.lbl-account-number' | translate}} | </span>
+                        <span class="account-number-value">{{contract.accountNumber}}</span>
+                    </div>
+                    <span *ngIf="accountInfoService.isPastDue(contract.currentBalance)" class="error-validation badge badge-error past-due">{{'ngw.global.past-due' | translate}}</span>
+                </div>
+                <div class="contract-body">
+                    <div class="contract-vehicle">
+                        <app-contract-image class="vehicle-image" vehicleImageData="{{accountInfoService.getVehicleImageData(contract.accountNumber)}}"></app-contract-image>
+                    </div>
+                    <div class="contract-details">
+                        <ul>
+                            <li *ngIf="!accountInfoService.isPastDue(contract.currentBalance)">
+                                <span class="label">{{'ngw.contract-list.lbl-duedate' | translate}}</span>
+                                <span class="value">{{contract.nextPaymentDueDate| date:'mediumDate'}}</span>
+                            </li>
+                            <li>
+                                <span class="label">{{'ngw.contract-list.lbl-monthly-payment' | translate}}</span>
+                                <span class="value">
+                                    {{contract.monthlyTotalPaymentAmount | currency : 'USD':true}}
+                                </span>
+                            </li>
+                            <li *ngIf="hasNoLastpayment(contract)">
+                                <span class="label">{{'ngw.contract-list.lbl-last-payment' | translate}}</span>
+                                <span class="value">
+                                    {{contract.lastPaymentAmount | currency : 'USD':true}} <span class="weight-normal">{{'ngw.contract-list.lbl-on' | translate}}</span> {{contract.lastPaymentDate| date:'mediumDate'}}
+                                </span>
+                            </li>
+                            <li *ngIf="getScheduledPayment(contract.accountNumber) !== null && getScheduledPayment(contract.accountNumber) !== undefined && getScheduledPayment(contract.accountNumber)?.scheduledItemDTO?.scheduledDate">
+                                <span class="label">{{'ngw.contract-list.lbl-pending' | translate}}</span>
+                                <span class="value"><i class="fa fa-clock-o" aria-hidden="true"></i> {{getScheduledPayment(contract.accountNumber)?.scheduledItemDTO?.scheduledAmount | currency : 'USD':true}} <span class="weight-normal">{{'ngw.contract-list.lbl-scheduled-on' | translate}}</span> {{getScheduledPayment(contract.accountNumber)?.scheduledItemDTO?.scheduledDate | date:'mediumDate'}}</span>
+                            </li>
+                            <li *ngIf="getPayoff(contract.fSAccountId) !== null && getPayoff(contract.fSAccountId) !== undefined && getPayoff(contract.fSAccountId).payoffAmount">
+                                <span class="label">{{'ngw.contract-list.lbl-estimated-payoff' | translate}}</span>
+                                <span class="value">{{getPayoff(contract.fSAccountId).payoffAmount | currency : 'USD':true }}</span>
+                            </li>
+                            <li class="contract-payment-amount">
+                                <span class="label">{{getAmountLabel(contract.totalAmountDue) | translate}}</span>
+                                <span class="value" *ngIf="accountInfoService.isPastDue(contract.currentBalance)">{{contract.currentBalance | currency : 'USD':true | parensToMinus}}</span>
+                                <span class="value" *ngIf="!accountInfoService.isPastDue(contract.currentBalance)">{{contract.totalAmountDue | currency : 'USD':true | parensToMinus}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="contract-payment">
+                        <button class="btn" (click)="navigateToOneTimePayment(contract.accountNumber)" id="makeAPaymentBtn">{{'ngw.contract-list.btn-make-paymnt' | translate}}</button>
+                        <button class="btn btn-secondary btn-transparent" (click)="navigateToAccountDetails(contract.accountNumber)" id="accountDetailsBtn">{{'ngw.contract-list.btn-account-details' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contract-list alert alert-danger" *ngIf="contractError" id="errorMsg">
+        <p class="error-validation">{{errorMessage | translate}}</p>
+    </div>
+    <div class="contract-list alert alert-danger" *ngIf="listLength == 0">
+        <p>{{errorMessage | translate}}</p>
+    </div>
+</div>
